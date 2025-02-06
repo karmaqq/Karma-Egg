@@ -1,120 +1,154 @@
 let karma = 100;
 let kps = 0.50;
-let animals = {
-  chicken: { price: 15, kps: 0.10, quantity: 1 },
-  pigeon: { price: 100, kps: 1.00, quantity: 1 },
-  duck: { price: 1100, kps: 5.00, quantity: 0 },
-  owl: { price: 12000, kps: 10.00, quantity: 0 },
-  parrot: { price: 130000, kps: 50.00, quantity: 0 },
-  phoenix: { price: 1400000, kps: 100.00, quantity: 0 }
+let eggMultiplier = 1.0;
+
+const habitats = [
+  { name: "Kümes", price: 1000, image: "img/habitats/coop.png", level: 0 },
+  { name: "Çatı", price: 10000, image: "img/habitats/roof.png", level: 0 },
+  { name: "Gölet", price: 50000, image: "img/habitats/lake.png", level: 0 },
+  { name: "Kara Orman", price: 120000, image: "img/habitats/nightforest.png", level: 0 },
+  { name: "Tropikal", price: 500000, image: "img/habitats/tropical.png", level: 0 },
+  { name: "Dağ", price: 1400000, image: "img/habitats/mountain.png", level: 0 }
+];
+
+const animals = {
+  chicken: { price: 15, kps: 0.10, quantity: 0, image: "img/animal/chicken.png" },
+  pigeon: { price: 100, kps: 1.00, quantity: 0, image: "img/animal/pigeon.png" },
+  duck: { price: 1100, kps: 5.00, quantity: 0, image: "img/animal/duck.png" },
+  owl: { price: 12000, kps: 10.00, quantity: 0, image: "img/animal/owl.png" },
+  parrot: { price: 130000, kps: 50.00, quantity: 0, image: "img/animal/parrot.png" },
+  phoenix: { price: 1400000, kps: 100.00, quantity: 0, image: "img/animal/phoenix.png" }
 };
 
-// Sayıyı bin, milyon, milyar gibi birimlerle formatlayan fonksiyon
 function formatNumber(num) {
-  if (num < 1e3) {
-    return num.toFixed(2);
-  } else if (num < 1e6) {
-    return (num / 1e3).toFixed(2) + " K";
-  } else if (num < 1e9) {
-    return (num / 1e6).toFixed(2) + " M";
-  } else if (num < 1e12) {
-    return (num / 1e9).toFixed(2) + " B";
-  } else if (num < 1e15) {
-    return (num / 1e12).toFixed(2) + " T";
-  } else {
-    return (num / 1e15).toFixed(2) + " Q";
-  }
+  if (num < 1e3) return num.toFixed(2);
+  if (num < 1e6) return (num / 1e3).toFixed(2) + " K";
+  if (num < 1e9) return (num / 1e6).toFixed(2) + " M";
+  if (num < 1e12) return (num / 1e9).toFixed(2) + " B";
+  return (num / 1e12).toFixed(2) + " T";
 }
 
-// Karma Güncelleme Fonksiyonu
-function updateKarma() {
-  document.querySelector(".karma").textContent = `🔷${formatNumber(karma)}`;
+function updateStats() {
+  document.querySelector(".karma").textContent = `🔷${karma.toFixed(2)}`;
+  document.querySelector(".kps-text").textContent = `KPS: ${kps.toFixed(2)}`;
 }
 
-// KPS Güncelleme Fonksiyonu
-function updateKps() {
-  document.querySelector(".kps-text").textContent = `KPS: ${formatNumber(kps)}`;
-}
+function createHabitat(habitat) {
+  const habitatElement = document.createElement("div");
+  habitatElement.className = "habitat";
 
-// Mağazadaki Hayvanları Güncelleme
-function updateShopItem(animal) {
-  const item = animals[animal];
-  const itemElement = document.querySelector(`.store-item[onclick="buyItem('${animal}')"]`);
+  const img = document.createElement("img");
+  img.src = habitat.image;
+  img.alt = habitat.name;
 
-  if (itemElement) {
-    itemElement.querySelector(".quantity").textContent = `${item.quantity}`;
-    itemElement.querySelector(".price").textContent = `🔷${formatNumber(item.price)}`;
-    itemElement.querySelector(".kps").textContent = `${formatNumber(item.kps)}`;
-    
-    // Karma'yı kontrol et, eğer yeterli değilse, öğeyi devre dışı bırak
-    if (karma >= item.price) {
-      itemElement.style.opacity = 1; // Tam görünür
-      itemElement.style.pointerEvents = "auto"; // Tıklanabilir yap
-    } else {
-      itemElement.style.opacity = 0.5; // Yarı saydam
-      itemElement.style.pointerEvents = "none"; // Tıklanamaz hale getir
-    }
-  }
-}
+  const info = document.createElement("div");
+  info.className = "habitat-info";
 
-let eggMultiplier = 1.0;
-document.querySelector('.egg-box').addEventListener('click', () => {
-  karma += 0.1 * eggMultiplier;
-  eggMultiplier += 0.7; // Her tıklamada artan bonus
-});
+  const text = document.createElement("div");
+  text.textContent = `${habitat.name}: Seviye ${habitat.level}`;
 
-// Hayvan Satın Alma Fonksiyonu
-function buyItem(animal) {
-  const item = animals[animal];
-  if (karma >= item.price) {
-    karma -= item.price;
-    item.quantity += 1;
-    
-    // Toplam KPS'ye temel KPS değerini ekle
-    kps += item.kps;
+  const button = document.createElement("button");
+  button.textContent = `🔷${formatNumber(habitat.price)} Yükselt`;
+  button.onclick = () => upgradeHabitat(habitat);
+
+  info.appendChild(text);
+  info.appendChild(button);
+  habitatElement.appendChild(img);
+  habitatElement.appendChild(info);
   
+  document.querySelector(".habitats").appendChild(habitatElement);
+}
 
-    // Fiyat artışı kontrolü
-    if (item.quantity % 50 === 0) {
-      // 50. alımda fiyat 100 katına çıkar
-      item.price = Math.round(item.price * 100);
-      item.kps *= 100; // KPS de 100 katına çıkar
-    } else if (item.quantity % 5 === 0) {
-      // 5. alımda fiyat 2 katına çıkar
-      item.price = Math.round(item.price * 2);
-      item.kps *= 2; // KPS de 2 katına çıkar
-    } else {
-      // Diğer durumlarda fiyat %10 artar
-      item.price = Math.round(item.price * 1.10);
-      item.kps *= 1.10; // KPS de %10 artar
-    }
-
-    updateKarma();
-    updateKps();
-    updateShopItem(animal);
+function upgradeHabitat(habitat) {
+  if (karma >= habitat.price) {
+    karma -= habitat.price;
+    habitat.level += 1;
+    habitat.price *= 1.10; 
+    updateStats();
+    updateHabitatUI();
   } else {
     alert("Yetersiz Karma!");
   }
 }
 
-// Zamanla Karma Kazandıran Fonksiyon
-function generateKarma() {
-  karma += kps;
-  updateKarma();
-  // Karma arttıkça hayvanlar için butonları güncelle
-  Object.keys(animals).forEach(animal => {
-    updateShopItem(animal);
-  });
+function updateHabitatUI() {
+  document.querySelector(".habitats").innerHTML = "";
+  habitats.forEach(createHabitat);
 }
 
-// Her saniye karma üret
-setInterval(generateKarma, 1000);
+function createStoreItem(animal) {
+  const item = animals[animal];
+  const itemElement = document.createElement("div");
+  itemElement.className = "store-item";
+  itemElement.onclick = () => buyItem(animal);
 
-// İlk Değerleri Güncelle
-updateKarma();
-updateKps();
+  const img = document.createElement("img");
+  img.src = item.image;
+  img.alt = animal;
 
-// Sayfa yüklendiğinde tüm mağaza öğelerini güncelle
-Object.keys(animals).forEach(animal => {
-  updateShopItem(animal);
+  const info = document.createElement("div");
+  info.className = "item-info";
+
+  const name = document.createElement("div");
+  name.className = "product-name";
+  name.textContent = animal.charAt(0).toUpperCase() + animal.slice(1);
+
+  const price = document.createElement("div");
+  price.className = "price";
+  price.textContent = `🔷${formatNumber(item.price)}`;
+
+  const kps = document.createElement("div");
+  kps.className = "kps";
+  kps.textContent = `${formatNumber(item.kps)} KPS`;
+
+  const quantity = document.createElement("div");
+  quantity.className = "quantity";
+  quantity.textContent = item.quantity;
+
+  info.appendChild(name);
+  info.appendChild(price);
+  info.appendChild(kps);
+
+  itemElement.appendChild(img);
+  itemElement.appendChild(info);
+  itemElement.appendChild(quantity);
+
+  document.querySelector(".shop").appendChild(itemElement);
+}
+
+function buyItem(animal) {
+  const item = animals[animal];
+  if (karma >= item.price) {
+    karma -= item.price;
+    item.quantity += 1;
+    kps += item.kps;
+
+    item.price *= 1.15;
+    item.kps *= 1.10;
+
+    updateStats();
+    updateStoreItemUI();
+  } else {
+    alert("Yetersiz Karma!");
+  }
+}
+
+function updateStoreItemUI() {
+  document.querySelector(".shop").innerHTML = "";
+  Object.keys(animals).forEach(createStoreItem);
+}
+
+setInterval(() => {
+  karma += kps;
+  updateStats();
+}, 1000);
+
+document.querySelector('.egg-box').addEventListener('click', () => {
+  karma += 0.1 * eggMultiplier;
+  eggMultiplier += 0.7;
+  updateStats();
 });
+
+habitats.forEach(createHabitat);
+Object.keys(animals).forEach(createStoreItem);
+updateStats();

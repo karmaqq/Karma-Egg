@@ -78,7 +78,8 @@ html, body {
     flex-direction: column;
     padding: 20px;
     width: 100%;
-    max-width: 33%;
+    min-width: 33%;
+    gap: 20px;
     background-color: #daaf77;
     overflow-y: auto;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -90,11 +91,11 @@ html, body {
     align-items: center;
     width: 100%;
     height: auto; /* Yüksekliği otomatik yap */
-    border-radius: 10px 10px 0 0;
     text-align: center;
     font-weight: bold;
     background-color: #ffffff;
     overflow: hidden; /* Taşan içeriği kes */
+    border-radius: 10px 10px 10px 10px;
 }
 
 .habitat:hover {
@@ -102,11 +103,11 @@ html, body {
 }
 
 .habitat img {
+    height: 100%;
     width: 100%;
-    height: auto; /* Resim yüksekliği sabit */
-    max-height: 100px;
-    border-radius: 10px 10px 0 0;
+    aspect-ratio: 5/1; /* Resim oranı */
     object-fit: cover;
+    
     object-position: bottom;
 }
 
@@ -118,9 +119,8 @@ html, body {
     width: 100%;
     padding-left: 10px;
     background-color: #ffffff;
-    border-radius: 0 0 10px 10px;
     font-size: 12px;
-    margin-bottom: 10px;
+    
 }
 
 .habitat-info button {
@@ -130,7 +130,6 @@ html, body {
     background-color: #3d2c2c;
     color: #ffffff;
     border: none;
-    border-radius: 0 0 10px 0;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -247,7 +246,6 @@ html, body {
     background-color: #45a049;
 }
 
-/* Responsive Ayarlar */
 @media (max-width: 1080px) {
     .container {
         flex-direction: column;
@@ -265,7 +263,7 @@ html, body {
 
     .habitats {
         max-width: 100%;
-        min-height: max-content;
+        margin-bottom: 20px;
     }
 
     .store-item:hover {
