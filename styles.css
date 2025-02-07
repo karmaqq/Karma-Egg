@@ -96,6 +96,10 @@ html, body {
     background-color: #ffffff;
     overflow: hidden; /* Taşan içeriği kes */
     border-radius: 10px 10px 10px 10px;
+    user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -ms-user-drag: none;
 }
 
 .habitat:hover {
