@@ -61,8 +61,6 @@ function upgradeHabitat(habitat) {
     updateStats();
     updateHabitatUI();
     updateStoreItemUI();
-  } else {
-    alert("Yetersiz Karma!");
   }
 }
 
@@ -124,9 +122,7 @@ function buyItem(animal) {
 
     updateStats();
     updateStoreItemUI();
-  } else {
-    alert("Yetersiz Karma!");
-  }
+  } 
 }
 
 function updateStoreItemUI() {
