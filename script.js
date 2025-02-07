@@ -13,11 +13,11 @@ const habitats = [
 
 const animals = {
   tavuk: { price: 10, kps: 1, quantity: 0, image: "img/animal/chicken.png", sound: "sounds/chicken.mp3" },
-  güvercin: { price: 50, kps: 5, quantity: 0, image: "img/animal/pigeon.png", sound: "sounds/pigeon.mp4" },
+  güvercin: { price: 50, kps: 5, quantity: 0, image: "img/animal/pigeon.png", sound: "sounds/pigeon.mp3" },
   ördek: { price: 200, kps: 20, quantity: 0, image: "img/animal/duck.png", sound: "sounds/duck.mp3" },
   baykuş: { price: 1000, kps: 100, quantity: 0, image: "img/animal/owl.png", sound: "sounds/owl.mp3" },
   papağan: { price: 5000, kps: 500, quantity: 0, image: "img/animal/parrot.png", sound: "sounds/parrot.mp3" },
-  phoenix: { price: 25000, kps: 2500, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp4" }
+  phoenix: { price: 25000, kps: 2500, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp3" }
 };
 
 // --------------- HABİTAT ---------------
