@@ -20,7 +20,19 @@ const animals = {
   phoenix: { price: 25000, kps: 2500, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp3" }
 };
 
-// --------------- HABİTAT ---------------
+// --------------- YUMURTA TIKLAMA ---------------
+function createEgg() {
+  const eggElement = document.querySelector(".egg-box");
+  eggElement.onclick = () => addKarma();  // Yumurtaya tıklanıldığında karma ekle
+}
+
+// --------------- KARMA ARTIRMA ---------------
+function addKarma() {
+  karma += 1;  // Her tıklamada 1 karma eklenir
+  updateStats();  // İstatistikleri güncelle
+}
+
+// --------------- HABİTAT YÜKSELTME ---------------
 function createHabitat(habitat) {
   const habitatElement = document.createElement("div");
   habitatElement.className = "habitat";
@@ -163,7 +175,6 @@ function formatNumber(num) {
   for (let i = 0; i < thresholds.length; i++) {
     if (num >= thresholds[i].value) {
       const formattedNumber = (num / thresholds[i].value).toFixed(2);
-      // Eğer küsurat 0 ise, tam sayıya dönüştür
       return (formattedNumber.endsWith('.00')) 
         ? formattedNumber.split('.00')[0] + thresholds[i].symbol 
         : formattedNumber + thresholds[i].symbol;
@@ -171,12 +182,12 @@ function formatNumber(num) {
   }
 }
 
-
 // --------------- OYUN BAŞLATMA ---------------
-habitats.forEach(createHabitat);
-Object.keys(animals).forEach(createStoreItem);
-updateStats();
+createEgg();  // Yumurtayı tıklanabilir yap
+habitats.forEach(createHabitat); // Habitatları oluştur
+Object.keys(animals).forEach(createStoreItem); // Mağaza öğelerini oluştur
+updateStats();  // İstatistikleri güncelle
 setInterval(() => {
-  karma += kps;
-  updateStats();
+  karma += kps;  // KPS her saniye karma ekler
+  updateStats();  // İstatistikleri güncelle
 }, 1000);
