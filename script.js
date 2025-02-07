@@ -1,5 +1,5 @@
 // --------------- TEMEL DEĞERLER ---------------
-let karma = 0;
+let karma = 10000000000000000000000;
 let kps = 1;
 
 const habitats = [
@@ -12,12 +12,12 @@ const habitats = [
 ];
 
 const animals = {
-  tavuk: { price: 10, kps: 1, quantity: 0, image: "img/animal/chicken.png" },
-  güvercin: { price: 50, kps: 5, quantity: 0, image: "img/animal/pigeon.png" },
-  ördek: { price: 200, kps: 20, quantity: 0, image: "img/animal/duck.png" },
-  baykuş: { price: 1000, kps: 100, quantity: 0, image: "img/animal/owl.png" },
-  papağan: { price: 5000, kps: 500, quantity: 0, image: "img/animal/parrot.png" },
-  phoenix: { price: 25000, kps: 2500, quantity: 0, image: "img/animal/phoenix.png" }
+  tavuk: { price: 10, kps: 1, quantity: 0, image: "img/animal/chicken.png", sound: "sounds/chicken.mp3" },
+  güvercin: { price: 50, kps: 5, quantity: 0, image: "img/animal/pigeon.png", sound: "sounds/pigeon.mp4" },
+  ördek: { price: 200, kps: 20, quantity: 0, image: "img/animal/duck.png", sound: "sounds/duck.mp3" },
+  baykuş: { price: 1000, kps: 100, quantity: 0, image: "img/animal/owl.png", sound: "sounds/owl.mp3" },
+  papağan: { price: 5000, kps: 500, quantity: 0, image: "img/animal/parrot.png", sound: "sounds/parrot.mp3" },
+  phoenix: { price: 25000, kps: 2500, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp4" }
 };
 
 // --------------- HABİTAT ---------------
@@ -120,6 +120,10 @@ function buyItem(animal) {
     item.price *= 1.15;
     item.kps *= 1.07;
 
+    // Ses dosyasını çal
+    const audio = new Audio(item.sound);
+    audio.play();
+
     updateStats();
     updateStoreItemUI();
   } 
@@ -140,7 +144,6 @@ function updateKPS() {
   kps = Object.values(animals).reduce((sum, animal) => sum + animal.kps * animal.quantity, 0);
 }
 
-// --------------- SAYI KISALTMA ---------------
 function formatNumber(num) {
   const thresholds = [
     { value: 1e30, symbol: " No" },
@@ -154,13 +157,20 @@ function formatNumber(num) {
     { value: 1e6,  symbol: " M"  },
     { value: 1e3,  symbol: " K"  }
   ];
-  if (num < 1e3) return num.toFixed(2);
+
+  if (num < 1e3) return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+
   for (let i = 0; i < thresholds.length; i++) {
     if (num >= thresholds[i].value) {
-      return (num / thresholds[i].value).toFixed(2) + thresholds[i].symbol;
+      const formattedNumber = (num / thresholds[i].value).toFixed(2);
+      // Eğer küsurat 0 ise, tam sayıya dönüştür
+      return (formattedNumber.endsWith('.00')) 
+        ? formattedNumber.split('.00')[0] + thresholds[i].symbol 
+        : formattedNumber + thresholds[i].symbol;
     }
   }
 }
+
 
 // --------------- OYUN BAŞLATMA ---------------
 habitats.forEach(createHabitat);
