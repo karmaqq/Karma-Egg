@@ -1,5 +1,5 @@
 // --------------- TEMEL DEĞERLER ---------------
-let karma = 1000000000000000;
+let karma = 0;
 let kps = 1;
 
 const habitats = [
