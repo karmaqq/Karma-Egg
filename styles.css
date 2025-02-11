@@ -67,6 +67,33 @@ html, body {
     transform: scale(1.15) rotate(5deg);
 }
 
+.animal-contribution {
+    height: 100%;
+    transition: none; /* Genişleme animasyonunu kaldırıyoruz */
+  }
+  
+  .bar-background {
+    width: 100%;  /* Barın genişliği her zaman sabit olacak */
+    height: 20px;
+    background-color: #eee;
+    border-radius: 10px;
+  }
+  
+  .contribution-bar {
+    display: flex;
+    height: 20px;
+    width: 100%;  /* Sabit genişlik, bar her zaman bu genişlikte olacak */
+    margin-top: 10px;
+    position: relative;
+  }
+  
+  .contribution-text {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+
 /* Habitats Bölümü */
 .habitats {
     padding: 20px;

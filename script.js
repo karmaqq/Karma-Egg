@@ -1,16 +1,18 @@
 // --------------- TEMEL DEĞERLER ---------------
-let karma = 0;
+let karma = 1000;
 let kps = 1;
 
+// --------------- HABİTATLAR ---------------
 const habitats = [
-  { name: "Kümes", price: 100, image: "img/habitats/coop.png", level: 0 },
-  { name: "Çatı", price: 500, image: "img/habitats/roof.png", level: 0 },
-  { name: "Gölet", price: 2000, image: "img/habitats/lake.png", level: 0 },
-  { name: "Kara Orman", price: 10000, image: "img/habitats/nightforest.png", level: 0 },
-  { name: "Tropikal", price: 50000, image: "img/habitats/tropical.png", level: 0 },
-  { name: "Dağ", price: 250000, image: "img/habitats/mountain.png", level: 0 }
+  { name: "Kümes", price: 100, image: "img/habitats/coop.png", level: 0, boosts: ["tavuk"] },
+  { name: "Çatı", price: 500, image: "img/habitats/roof.png", level: 0, boosts: ["güvercin"] },
+  { name: "Gölet", price: 2000, image: "img/habitats/lake.png", level: 0, boosts: ["ördek"] },
+  { name: "Kara Orman", price: 10000, image: "img/habitats/nightforest.png", level: 0, boosts: ["baykuş"] },
+  { name: "Tropikal", price: 50000, image: "img/habitats/tropical.png", level: 0, boosts: ["papağan"] },
+  { name: "Dağ", price: 250000, image: "img/habitats/mountain.png", level: 0, boosts: ["phoenix"] }
 ];
 
+// --------------- HAYVANLAR ---------------
 const animals = {
   tavuk: { price: 1, kps: 1, quantity: 0, image: "img/animal/chicken.png", sound: "sounds/chicken.mp3" },
   güvercin: { price: 40, kps: 2, quantity: 0, image: "img/animal/pigeon.png", sound: "sounds/pigeon.mp3" },
@@ -20,19 +22,83 @@ const animals = {
   phoenix: { price: 42000, kps: 100, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp3" }
 };
 
+// --------------- KPS GÜNCELLEME ---------------
+function updateKPS() {
+  let totalKPS = Object.keys(animals).reduce((sum, animal) => {
+    let baseKPS = animals[animal].kps * animals[animal].quantity;
+    let bonusMultiplier = animals[animal].bonus || 1;
+    return sum + baseKPS * bonusMultiplier;
+  }, 0);
+
+  kps = totalKPS;
+  updateStats();
+  updateAnimalContribution();  // Burada da barı güncelliyoruz
+}
+
+// --------------- STAT GÜNCELLEME ---------------
+function updateStats() {
+  document.querySelector(".karma").textContent = `💲${formatNumber(karma)}`;
+  document.querySelector(".kps-text").textContent = `⚡${formatNumber(kps)}`;
+}
+
+
 // --------------- YUMURTA TIKLAMA ---------------
 function createEgg() {
-  const eggElement = document.querySelector(".egg-box");
-  eggElement.onclick = () => addKarma();  // Yumurtaya tıklanıldığında karma ekle
+  document.querySelector(".egg-box").onclick = () => addKarma();
 }
 
-// --------------- KARMA ARTIRMA ---------------
 function addKarma() {
-  karma += 1;  // Her tıklamada 1 karma eklenir
-  updateStats();  // İstatistikleri güncelle
+  karma += 1;
+  updateStats();
 }
 
-// --------------- HABİTAT YÜKSELTME ---------------
+// --------------- KPS BAR ---------------
+// Hayvanların KPS katkılarını yüzdelik olarak hesapla
+function updateAnimalContribution() {
+  const totalKPS = kps;
+  let totalContribution = 0;
+  let contributionText = "Hayvan Katkısı: ";
+  
+  // Renkler listesi, her hayvana farklı renk atayacağız
+  const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#F4FF33", "#33FFF5"];
+
+  // Hayvanları sıralamak için sıralama kuralları
+  const fixedOrder = ["tavuk", "güvercin", "ördek", "baykuş", "papağan", "phoenix"];
+
+  // Katkı metnini temizle ve barı sıfırla
+  const contributionBar = document.querySelector(".contribution-bar");
+  contributionBar.innerHTML = '';  // Önceki barları temizle
+  contributionText = "Hayvan Katkısı: "; // Metni sıfırla
+  
+  // Hayvanları sıralı olarak geç
+  fixedOrder.forEach((animal, index) => {
+    if (animals[animal]) {
+      const animalItem = animals[animal];
+      const animalKPS = animalItem.kps * animalItem.quantity * (animalItem.bonus || 1);
+      const percentage = (animalKPS / totalKPS) * 100;
+
+      if (percentage > 0) {
+        contributionText += `${animal.charAt(0).toUpperCase() + animal.slice(1)}: ${percentage.toFixed(2)}% `;
+
+        // Katkı yüzdesine göre barı güncelle
+        const contributionElement = document.createElement("div");
+        contributionElement.style.width = `${percentage}%`;
+        contributionElement.style.backgroundColor = colors[index] || "#D3D3D3"; // Her hayvan için farklı renk
+        contributionElement.className = "animal-contribution";
+
+        contributionBar.appendChild(contributionElement);
+        totalContribution += percentage;
+      }
+    }
+  });
+
+  // Katkı metnini güncelle
+  const contributionTextElement = document.querySelector(".contribution-text");
+  contributionTextElement.textContent = contributionText;
+}
+
+
+// --------------- HABİTAT OLUŞTURMA ---------------
 function createHabitat(habitat) {
   const habitatElement = document.createElement("div");
   habitatElement.className = "habitat";
@@ -48,27 +114,30 @@ function createHabitat(habitat) {
   text.textContent = `${habitat.name}: Seviye ${habitat.level}`;
 
   const button = document.createElement("button");
-  button.textContent = `🔷${formatNumber(habitat.price)} Yükselt`;
+  button.textContent = `💲${formatNumber(habitat.price)} Yükselt`;
   button.onclick = () => upgradeHabitat(habitat);
 
   info.appendChild(text);
   info.appendChild(button);
   habitatElement.appendChild(img);
   habitatElement.appendChild(info);
-  
+
   document.querySelector(".habitats").appendChild(habitatElement);
 }
 
+// --------------- HABİTAT YÜKSELTME ---------------
 function upgradeHabitat(habitat) {
   if (karma >= habitat.price) {
     karma -= habitat.price;
     habitat.level += 1;
     habitat.price *= 1.10;
-    
-    if (animals[habitat.name.toLowerCase()]) {
-      animals[habitat.name.toLowerCase()].kps *= 1.10;
-    }
-    
+
+    habitat.boosts.forEach(hayvan => {
+      if (animals[hayvan]) {
+        animals[hayvan].bonus = 1 + habitat.level * 0.20; // 🟢 Bonusları ayrı değişkende tutuyoruz
+      }
+    });
+
     updateKPS();
     updateStats();
     updateHabitatUI();
@@ -84,6 +153,11 @@ function updateHabitatUI() {
 // --------------- MAĞAZA ---------------
 function createStoreItem(animal) {
   const item = animals[animal];
+
+  // 🟢 Habitat bonuslarını uygula
+  let bonusMultiplier = item.bonus || 1;
+  let totalKPS = item.kps * item.quantity * bonusMultiplier;
+
   const itemElement = document.createElement("div");
   itemElement.className = "store-item";
   itemElement.onclick = () => buyItem(animal);
@@ -101,19 +175,26 @@ function createStoreItem(animal) {
 
   const price = document.createElement("div");
   price.className = "price";
-  price.textContent = `🔷${formatNumber(item.price)}`;
+  price.textContent = `💲${formatNumber(item.price)}`;
 
-  const kpsElement = document.createElement("div");
-  kpsElement.className = "kps";
-  kpsElement.textContent = `${formatNumber(item.kps)} KPS`;
+  // 🟢 Anlık KPS Kazancı
+  const kpsGain = document.createElement("div");
+  kpsGain.className = "kps-gain";
+  kpsGain.textContent = `❇️${formatNumber(item.kps)}`;
+
+  // 🟢 Toplam KPS Katkısı (Habitat bonusları dahil)
+  const totalKpsElement = document.createElement("div");
+  totalKpsElement.className = "total-kps";
+  totalKpsElement.textContent = `⚡${formatNumber(totalKPS)}`;
 
   const quantity = document.createElement("div");
   quantity.className = "quantity";
-  quantity.textContent = item.quantity;
+  quantity.textContent = `x${item.quantity}`;
 
   info.appendChild(name);
   info.appendChild(price);
-  info.appendChild(kpsElement);
+  info.appendChild(kpsGain);
+  info.appendChild(totalKpsElement);
 
   itemElement.appendChild(img);
   itemElement.appendChild(info);
@@ -122,23 +203,27 @@ function createStoreItem(animal) {
   document.querySelector(".shop").appendChild(itemElement);
 }
 
+// --------------- HAYVAN SATIN ALMA ---------------
+
 function buyItem(animal) {
   const item = animals[animal];
+
   if (karma >= item.price) {
     karma -= item.price;
     item.quantity += 1;
-    kps += item.kps;
+
+    let bonusMultiplier = item.bonus || 1;
+    kps += item.kps * bonusMultiplier;
 
     item.price *= 1.15;
     item.kps *= 1.07;
 
-    // Ses dosyasını çal
-    const audio = new Audio(item.sound);
-    audio.play();
+    new Audio(item.sound).play();
 
-    updateStats();
+    updateKPS();
     updateStoreItemUI();
-  } 
+    updateStats();
+  }
 }
 
 function updateStoreItemUI() {
@@ -146,16 +231,7 @@ function updateStoreItemUI() {
   Object.keys(animals).forEach(createStoreItem);
 }
 
-// --------------- GÜNCELLEME FONKSİYONLARI ---------------
-function updateStats() {
-  document.querySelector(".karma").textContent = `🔷${formatNumber(karma)}`;
-  document.querySelector(".kps-text").textContent = `KPS: ${formatNumber(kps)}`;
-}
-
-function updateKPS() {
-  kps = Object.values(animals).reduce((sum, animal) => sum + animal.kps * animal.quantity, 0);
-}
-
+// --------------- SAYI FORMATLAMA ---------------
 function formatNumber(num) {
   const thresholds = [
     { value: 1e30, symbol: " No" },
@@ -183,11 +259,14 @@ function formatNumber(num) {
 }
 
 // --------------- OYUN BAŞLATMA ---------------
-createEgg();  // Yumurtayı tıklanabilir yap
-habitats.forEach(createHabitat); // Habitatları oluştur
-Object.keys(animals).forEach(createStoreItem); // Mağaza öğelerini oluştur
-updateStats();  // İstatistikleri güncelle
+createEgg();
+habitats.forEach(createHabitat);
+Object.keys(animals).forEach(createStoreItem);
+updateStats();
+updateAnimalContribution();
+
+
 setInterval(() => {
-  karma += kps;  // KPS her saniye karma ekler
-  updateStats();  // İstatistikleri güncelle
+  karma += kps;
+  updateStats();
 }, 1000);
