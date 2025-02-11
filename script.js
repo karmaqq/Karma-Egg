@@ -114,7 +114,7 @@ function createHabitat(habitat) {
   text.textContent = `${habitat.name}: Seviye ${habitat.level}`;
 
   const button = document.createElement("button");
-  button.textContent = `💲${formatNumber(habitat.price)} Yükselt`;
+  button.textContent = `🪷${formatNumber(habitat.price)} Yükselt`;
   button.onclick = () => upgradeHabitat(habitat);
 
   info.appendChild(text);
