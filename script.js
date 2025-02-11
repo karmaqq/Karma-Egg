@@ -37,7 +37,7 @@ function updateKPS() {
 
 // --------------- STAT GÜNCELLEME ---------------
 function updateStats() {
-  document.querySelector(".karma").textContent = `💲${formatNumber(karma)}`;
+  document.querySelector(".karma").textContent = `🪷${formatNumber(karma)}`;
   document.querySelector(".kps-text").textContent = `⚡${formatNumber(kps)}`;
 }
 
@@ -180,7 +180,7 @@ function createStoreItem(animal) {
   // 🟢 Anlık KPS Kazancı
   const kpsGain = document.createElement("div");
   kpsGain.className = "kps-gain";
-  kpsGain.textContent = `❇️${formatNumber(item.kps)}`;
+  kpsGain.textContent = `✨${formatNumber(item.kps)}`;
 
   // 🟢 Toplam KPS Katkısı (Habitat bonusları dahil)
   const totalKpsElement = document.createElement("div");
