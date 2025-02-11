@@ -175,7 +175,7 @@ function createStoreItem(animal) {
 
   const price = document.createElement("div");
   price.className = "price";
-  price.textContent = `💲${formatNumber(item.price)}`;
+  price.textContent = `🪷${formatNumber(item.price)}`;
 
   // 🟢 Anlık KPS Kazancı
   const kpsGain = document.createElement("div");
