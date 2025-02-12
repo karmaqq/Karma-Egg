@@ -45,15 +45,17 @@ html, body {
 }
 
 .karma-box {
+    background-color: #5c5c5c;
+    width: 100%;
+    border: #333 1px solid;
     font-size: 36px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 10px;
     color: #5a3d3d;
 }
 
 .kps-box {
-    font-size: 20px;
+    font-size: 32px;
     text-align: center;
     margin-top: 10px;
 }
@@ -69,11 +71,11 @@ html, body {
 
 .animal-contribution {
     height: 100%;
-    transition: none;
-}
+    transition: none; /* Genişleme animasyonunu kaldırıyoruz */
+  }
   
-.bar-background {
-    width: 100%;
+  .bar-background {
+    width: 100%;  /* Barın genişliği her zaman sabit olacak */
     height: 20px;
     background-color: #eee;
     
