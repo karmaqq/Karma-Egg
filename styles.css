@@ -69,30 +69,29 @@ html, body {
 
 .animal-contribution {
     height: 100%;
-    transition: none; /* Genişleme animasyonunu kaldırıyoruz */
-  }
+    transition: none;
+}
   
-  .bar-background {
-    width: 100%;  /* Barın genişliği her zaman sabit olacak */
+.bar-background {
+    width: 100%;
     height: 20px;
     background-color: #eee;
-    border-radius: 10px;
-  }
+    
+}
   
-  .contribution-bar {
+.contribution-bar {
     display: flex;
     height: 20px;
-    width: 100%;  /* Sabit genişlik, bar her zaman bu genişlikte olacak */
+    width: 100%;
     margin-top: 10px;
     position: relative;
-  }
+}
   
-  .contribution-text {
+.contribution-text {
     margin-top: 5px;
     font-size: 14px;
     font-weight: bold;
-  }
-  
+}
 
 /* Habitats Bölümü */
 .habitats {
