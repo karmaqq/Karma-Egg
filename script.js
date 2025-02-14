@@ -1,5 +1,5 @@
 // --------------- TEMEL DEĞERLER ---------------
-let karma = 0;
+let karma = 1000000000000000000;
 let kps = 1;
 
 // --------------- HABİTATLAR ---------------
@@ -43,13 +43,27 @@ function updateStats() {
 
 
 // --------------- YUMURTA TIKLAMA ---------------
+
 function createEgg() {
-  document.querySelector(".egg-box").onclick = () => addKarma();
+  const eggBox = document.querySelector(".egg-box");
+
+  eggBox.onclick = () => {
+    addKarma();
+    triggerAnimation(eggBox);
+  };
 }
 
 function addKarma() {
   karma += 1;
   updateStats();
+}
+
+function triggerAnimation(eggBox) {
+  eggBox.classList.add("clicked");
+
+  setTimeout(() => {
+    eggBox.classList.remove("clicked");
+  }, 200);
 }
 
 // --------------- KPS BAR ---------------
@@ -58,7 +72,7 @@ function updateAnimalContribution() {
   let totalContribution = 0;
   let contributionText = "Hayvan Katkısı: ";
   
-  const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33A1", "#F4FF33", "#33FFF5"];
+  const colors = ["#e74d45", "##faeddc", "#77a0b6", "#916059", "#64dd9a", "#ae251b"];
 
   const fixedOrder = ["tavuk", "güvercin", "ördek", "baykuş", "papağan", "phoenix"];
 
@@ -91,8 +105,6 @@ contributionTextElement.innerHTML = fixedOrder
   .filter(animal => animals[animal] && (animals[animal].kps * animals[animal].quantity) > 0)
   .map(animal => `<div>${animal.charAt(0).toUpperCase() + animal.slice(1)}: ${((animals[animal].kps * animals[animal].quantity * (animals[animal].bonus || 1)) / totalKPS * 100).toFixed(2)}%</div>`)
   .join("");
-
-
 }
 
 // --------------- HABİTAT OLUŞTURMA ---------------
