@@ -14,12 +14,12 @@ const habitats = [
 
 // --------------- HAYVANLAR ---------------
 const animals = {
-  tavuk: { price: 1, kps: 1, quantity: 0, image: "img/animal/chicken.png", sound: "sounds/chicken.mp3" },
-  güvercin: { price: 40, kps: 2, quantity: 0, image: "img/animal/pigeon.png", sound: "sounds/pigeon.mp3" },
-  ördek: { price: 160, kps: 4, quantity: 0, image: "img/animal/duck.png", sound: "sounds/duck.mp3" },
-  baykuş: { price: 650, kps: 8, quantity: 0, image: "img/animal/owl.png", sound: "sounds/owl.mp3" },
-  papağan: { price: 10500, kps: 52, quantity: 0, image: "img/animal/parrot.png", sound: "sounds/parrot.mp3" },
-  phoenix: { price: 42000, kps: 100, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp3" }
+  tavuk: { price: 10, kps: 0.10, quantity: 0, image: "img/animal/chicken.png", sound: "sounds/chicken.mp3" },
+  güvercin: { price: 100, kps: 1, quantity: 0, image: "img/animal/pigeon.png", sound: "sounds/pigeon.mp3" },
+  ördek: { price: 1100, kps: 8, quantity: 0, image: "img/animal/duck.png", sound: "sounds/duck.mp3" },
+  baykuş: { price: 12000, kps: 47, quantity: 0, image: "img/animal/owl.png", sound: "sounds/owl.mp3" },
+  papağan: { price: 13000, kps: 260, quantity: 0, image: "img/animal/parrot.png", sound: "sounds/parrot.mp3" },
+  phoenix: { price: 1400000, kps: 1400, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp3" }
 };
 
 // --------------- KPS GÜNCELLEME ---------------
