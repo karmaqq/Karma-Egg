@@ -18,7 +18,7 @@ const animals = {
   güvercin: { price: 100, kps: 1, quantity: 0, image: "img/animal/pigeon.png", sound: "sounds/pigeon.mp3" },
   ördek: { price: 1100, kps: 8, quantity: 0, image: "img/animal/duck.png", sound: "sounds/duck.mp3" },
   baykuş: { price: 12000, kps: 47, quantity: 0, image: "img/animal/owl.png", sound: "sounds/owl.mp3" },
-  papağan: { price: 13000, kps: 260, quantity: 0, image: "img/animal/parrot.png", sound: "sounds/parrot.mp3" },
+  papağan: { price: 130000, kps: 260, quantity: 0, image: "img/animal/parrot.png", sound: "sounds/parrot.mp3" },
   phoenix: { price: 1400000, kps: 1400, quantity: 0, image: "img/animal/phoenix.png", sound: "sounds/phoenix.mp3" }
 };
 
@@ -64,7 +64,7 @@ function updateAnimalContribution() {
 
   const contributionBar = document.querySelector(".contribution-bar");
   contributionBar.innerHTML = '';
-  contributionText = "Hayvan Katkısı: ";
+  contributionText = "";
   
   fixedOrder.forEach((animal, index) => {
     if (animals[animal]) {
@@ -87,7 +87,12 @@ function updateAnimalContribution() {
   });
 
   const contributionTextElement = document.querySelector(".contribution-text");
-  contributionTextElement.textContent = contributionText;
+contributionTextElement.innerHTML = fixedOrder
+  .filter(animal => animals[animal] && (animals[animal].kps * animals[animal].quantity) > 0)
+  .map(animal => `<div>${animal.charAt(0).toUpperCase() + animal.slice(1)}: ${((animals[animal].kps * animals[animal].quantity * (animals[animal].bonus || 1)) / totalKPS * 100).toFixed(2)}%</div>`)
+  .join("");
+
+
 }
 
 // --------------- HABİTAT OLUŞTURMA ---------------

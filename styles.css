@@ -28,6 +28,8 @@ html, body {
 .stats, .habitats, .shop {
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 40px); /* Sayfanın tamamını kapsaması için */
+    overflow: hidden; /* İçerik taşarsa kaydırma olmasını engeller */
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -71,7 +73,8 @@ html, body {
 
 .animal-contribution {
     height: 100%;
-    transition: none; /* Genişleme animasyonunu kaldırıyoruz */
+    width: 100%;
+    border: #2ecc71 1px solid;
   }
   
   .bar-background {
@@ -97,10 +100,10 @@ html, body {
 
 /* Habitats Bölümü */
 .habitats {
+    overflow-y: auto; /* Yalnızca içerik fazla olursa kaydırma çıksın */
     padding: 20px;
     gap: 20px;
     background: linear-gradient(135deg, #daaf77, #b78c50);
-    overflow-y: auto;
     border-radius: 12px;
 }
 
@@ -154,6 +157,27 @@ html, body {
 .habitat-info button:hover {
     background: #5a3d3d;
     transform: scale(1.2);
+}
+
+/* Habitat Scrollbar */
+.habitats {
+    overflow-y: auto; /* Dikey scroll */
+    scrollbar-width: thin; /* Firefox için ince scroll */
+    scrollbar-color: #5a3d3d #b78c50; /* Kaydırma rengi ve arka plan */
+}
+
+/* Chrome, Edge ve Safari için Scrollbar */
+.habitats::-webkit-scrollbar {
+    width: 15px; /* Scroll genişliği */
+}
+
+.habitats::-webkit-scrollbar-track {
+    background: #e8a8c3; /* Scroll arka planı */
+    border-radius: 10px;
+}
+
+.habitats::-webkit-scrollbar-thumb:hover {
+    background: #3d2c2c; /* Üzerine gelince koyulaşsın */
 }
 
 /* Sağ Bölüm: Mağaza Tasarımı */
@@ -244,9 +268,8 @@ html, body {
         padding: 15px;
     }
 
-    .store-item {
-        width: 100%;
-        padding: 12px;
+    .stats, .shop, .habitats {
+        height: auto; /* Küçük ekranlarda yükseklik dinamik olsun */
     }
 
     .stats {
@@ -256,6 +279,12 @@ html, body {
     .habitats {
         max-width: 100%;
         margin-bottom: 20px;
+    }
+
+    .store-item {
+        max-height: 50vh; /* Mobilde habitatlara da kaydırma ekleyelim */
+        width: 100%;
+        padding: 12px;
     }
 
     .store-item:hover {
